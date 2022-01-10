@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>update</h2>
+
+<form action="/member/update" method="post">
+    <!-- 정보수정 링크클릭하면 update.html에 DB에 저장된 정보를 form
+ input 태그를 이용하여 출력합시다. 이름만 수정 가능하도록 합시다.-->
+    <input type="hidden" name="memberId">
+    이름: <input type="text" name="memberName" value="${member.memberName}">
+</form>
+</body>
+</html>
