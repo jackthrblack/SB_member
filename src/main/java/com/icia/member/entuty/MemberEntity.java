@@ -1,5 +1,6 @@
 package com.icia.member.entuty;
 
+import com.icia.member.dto.MemberDetailDTO;
 import com.icia.member.dto.MemberSaveDTO;
 import lombok.Getter;
 import lombok.Setter;
@@ -40,5 +41,23 @@ public class MemberEntity {
         // 변환이 완료된 memberEntity 객체를 넘겨줌
         return memberEntity;
     }
+    // MemberDetailDTO -> MemberEntity 객체로 변환하기 위한 메서드
+    public static MemberEntity toUpdateMember(MemberDetailDTO memberDetailDTO) {
+        // MemberEntity타입의 객체를 보내기 위해 memberEntity라는 객체 선언
+        MemberEntity memberEntity = new MemberEntity();
+
+        // 추가
+        memberEntity.setId(memberDetailDTO.getMemberId());
+        //
+
+        // memberEntity 객체에 memberSaveDTO 객체 안에 담긴 각 요소를 담아줌.
+        memberEntity.setMemberEmail(memberDetailDTO.getMemberEmail());
+        memberEntity.setMemberPassword(memberDetailDTO.getMemberPassword());
+        memberEntity.setMemberName(memberDetailDTO.getMemberName());
+
+        // 변환이 완료된 memberEntity 객체를 넘겨줌
+        return memberEntity;
+    }
+
 
 }

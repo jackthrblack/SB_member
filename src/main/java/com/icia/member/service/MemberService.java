@@ -18,4 +18,6 @@ public interface MemberService {
     boolean login(MemberLoginDTO memberLoginDTO);
 
     MemberDetailDTO findByEmail(String memberEmail);
+
+    Long update(MemberDetailDTO memberDetailDTO);
 }

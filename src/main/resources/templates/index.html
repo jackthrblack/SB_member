@@ -3,10 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
+    <script>function logout() {
+        location.href="member/logout"
+    }
+
+
+    </script>
 </head>
 <body>
 <a href="/member/save">회원가입</a>
 <a href="/member/login">로그인</a>
 <a href="/member/">회원목록</a>
+<button onclick="logout()">로그아웃</button>
 </body>
 </html>

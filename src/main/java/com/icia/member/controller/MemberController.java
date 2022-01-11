@@ -38,22 +38,37 @@ public class MemberController {
     //로그인폼
     @GetMapping("login")
     public String loginForm(){
+
         return "member/login";
     }
 
     //로그인처리
     @PostMapping("login")
-    public String login(@ModelAttribute MemberLoginDTO memberLoginDTO, HttpSession session){
+    public String login(@ModelAttribute MemberLoginDTO memberLoginDTO, HttpSession session,
+                        @RequestParam(defaultValue = "/") String redirectURL){
+
+        System.out.println("MemberController.login");
+        System.out.println("redirectURL = " + redirectURL);
+
         boolean loginResult = ms.login(memberLoginDTO);
+
         if (loginResult){
 //            session.setAttribute("loginEmail", memberLoginDTO.getMemberEmail());
             session.setAttribute(LOGIN_EMAIL, memberLoginDTO.getMemberEmail());
            // return "redirect:/member/"; //다시 컨트롤러로 목록 요청해야 하는까 목록은 리다이렉트~
-            return "member/mypage";
+           // return "member/mypage";
+            return "redirect:"+redirectURL; // 사용자가 요청한 주소로 보내주기 위해
         }else {
             return "member/login";
 
         }
+    }
+
+    //로그아웃
+    @GetMapping("logout")
+    public String logout(HttpSession session){
+        session.invalidate();
+        return "index";
     }
 
     //회원목록
@@ -108,16 +123,28 @@ public class MemberController {
         // 세션값은 오브젝트의 값인데 스트링으로 타입을 정해놓아서 오류가난다
         // -> 오브젝트는 최상위의 타입이라고 생가각하면 된다 => 그래서 강제형변환을 해줘야한다.
         String memberEmail = (String) session.getAttribute(LOGIN_EMAIL);
+
         MemberDetailDTO member = ms.findByEmail(memberEmail);
         model.addAttribute("member",member);
 
     return "member/update";
     }
 
-    //정보수정
+    //정보수정(post)
     @PostMapping("update")
-    public String update(){
-
-        return "member/update";
+    public String update(@ModelAttribute MemberDetailDTO memberDetailDTO){
+        Long memberId = ms.update(memberDetailDTO);
+        // 수정완료 후 해당회원의 상세페이지 출력
+        return "redirect:/member/"+memberDetailDTO.getMemberId();
    }
+
+   //수정처리(PUT)
+    @PutMapping("{memberId}")
+    // json으로 데이터가 전달되면 @RequstBody로 받아줘야함.
+    public ResponseEntity update2(@RequestBody MemberDetailDTO memberDetailDTO){
+        Long memberId = ms.update(memberDetailDTO);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+
 }

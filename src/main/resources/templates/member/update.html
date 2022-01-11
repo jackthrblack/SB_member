@@ -1,17 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script>
+        //() 매게변수
+        const memberUpdate = () => {
+            console.log('수정함수호출');
+            //DOM API를 이용하여 memberId, 이메일, 비먼, 이름을 가져와서
+            // 각각 javascript 함수에 담으시오.
+            const id = document.getElementById('memberId').value;
+            const email = document.querySelector('#memberEmail').value;
+            const password = $('#memberPassword').val(); //제이쿼리
+            // const name = '[[${member.memberName}]]'; // 제이에스피
+           const name = document.querySelector('#memberName').value;
+            console.log(id,email,password,name);
+
+            //javascript object에 담아서 ajax로 컨트롤러에 보기위한 세팅
+            // 담아가면서 제이슨 타입으로 변환
+            const updateData=JSON.stringify({
+                memberId:id,
+                memberEmail: email,
+                memberPassword: password,
+                memberName: name
+            });
+            console.log(updateData);
+
+            const reUrl ="/member/"+id;
+            $.ajax({
+                type: 'put', // 수정을 위한 요청 put: 덮어씌우기 / patch: 수정이 필요한 것만 바꾼다
+                data: updateData,
+                url: reUrl,
+                contentType: 'application/json', // json으로 보낼때는 꼭 써야함
+                success: function (){
+                    location.href="/member/"+id;
+                },
+                error: function (){
+                    alert('돌아가');
+                }
+            });
+        }
+    </script>
+
 </head>
 <body>
 <h2>update</h2>
 
-<form action="/member/update" method="post">
-    <!-- 정보수정 링크클릭하면 update.html에 DB에 저장된 정보를 form
- input 태그를 이용하여 출력합시다. 이름만 수정 가능하도록 합시다.-->
-    <input type="hidden" name="memberId">
-    이름: <input type="text" name="memberName" value="${member.memberName}">
+<form action="/member/update" id="member1" method="post">
+    <input type="hidden" name="memberId" id="memberId" th:value="${member.memberId}">
+    <input type="text" name="memberEmail" id="memberEmail" th:value="${member.memberEmail}" placeholder="이메일" readonly><br>
+    <input type="text" name="memberPassword" id="memberPassword" th:value="${member.memberPassword}" placeholder="비밀번호"><br>
+    <input type="text" name="memberName" id="memberName" placeholder="이름" th:value="${member.memberName}" ><br>
+    <input type="submit" value="수정">
+    <input type="button" value="수정(put)" th:onclick="memberUpdate()">
 </form>
 </body>
 </html>

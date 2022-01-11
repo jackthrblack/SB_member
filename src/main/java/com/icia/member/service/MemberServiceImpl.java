@@ -72,4 +72,14 @@ public class MemberServiceImpl implements MemberService{
         return memberDetailDTO;
     }
 
+    @Override
+    public Long update(MemberDetailDTO memberDetailDTO) {
+        // update 처리시 save 메서드 호출
+        // 알아서 덮어쓰우기를 한다.
+        // MemberDetailDTO -> MemberEntity
+        MemberEntity memberEntity = MemberEntity.toUpdateMember(memberDetailDTO);
+        Long memberId = mr.save(memberEntity).getId();
+        return memberId;
+    }
+
 }
